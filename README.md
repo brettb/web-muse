@@ -175,17 +175,6 @@ Web Bluetooth API is required. Check [browser compatibility](https://caniuse.com
 - [Examples](./examples/)
 - [Contributing Guide](./docs/CONTRIBUTING.md)
 
-## Comparison with muse-js
-
-| Feature                  | web-muse    | muse-js |
-| ------------------------ | ----------- | ------- |
-| Maintained               | ✅          | ❌      |
-| Current Firmware Support | ✅          | ❌      |
-| Web Bluetooth            | ✅          | ✅      |
-| React Integration        | ✅          | ❌      |
-| TypeScript Support       | Coming Soon | ✅      |
-| Signal Processing        | ✅          | ❌      |
-| Mock Data Support        | ✅          | ❌      |
 
 ## Contributing
 
@@ -199,4 +188,3 @@ MIT
 
 - Thanks to [muse-js](https://github.com/urish/muse-js) for pioneering Web Bluetooth support for Muse devices
 - Thanks to Interaxon for creating the Muse headband
-# web-muse
