@@ -173,12 +173,7 @@ Web Bluetooth API is required. Check [browser compatibility](https://caniuse.com
 
 - [API Documentation](./docs/API.md)
 - [Examples](./examples/)
-- [Contributing Guide](./docs/CONTRIBUTING.md)
 
-
-## Contributing
-
-Contributions are welcome! Please read our [Contributing Guide](./docs/CONTRIBUTING.md) for details on our code of conduct and the process for submitting pull requests.
 
 ## License
 
