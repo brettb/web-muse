@@ -1,6 +1,6 @@
 # web-muse
 
-A modern JavaScript library for connecting to Muse EEG devices using Web Bluetooth API. This project aims to provide a maintained alternative to [muse-js](https://github.com/urish/muse-js) which is no longer actively maintained and doesn't work with current Muse firmware versions.
+A modern JavaScript library for connecting to Muse EEG devices using Web Bluetooth API. This project aims to provide a maintained alternative to [muse-js](https://github.com/urish/muse-js) which is no longer actively maintained.
 
 ## Why web-muse?
 
@@ -18,7 +18,7 @@ A modern JavaScript library for connecting to Muse EEG devices using Web Bluetoo
 - React hooks and context for easy integration
 - Mock data support for development
 - Support for:
-  - EEG data (5 channels)
+  - EEG data (4 channels)
   - PPG data (3 channels)
   - Accelerometer data
   - Gyroscope data
@@ -31,7 +31,7 @@ A modern JavaScript library for connecting to Muse EEG devices using Web Bluetoo
 1. Clone the repository:
 
 ```bash
-git clone https://github.com/happy-thalamus/web-muse.git
+git clone https://github.com/itayinbarr/web-muse.git
 cd web-muse
 ```
 
@@ -82,7 +82,7 @@ Add this to your project's package.json:
 ```json
 {
   "dependencies": {
-    "web-muse": "github:happy-thalamus/web-muse"
+    "web-muse": "github:itayinbarr/web-muse"
   }
 }
 ```
