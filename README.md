@@ -1,3 +1,19 @@
+After attempting to install this project from the parent repo, I discovered that the project wasn't complete and the instructions did not function. I've updated the project to make it installable and runnable.
+
+Here's a list of changes from the previous version:
+
+- Add comprehensive build system with Rollup
+- Generate ESM and CommonJS builds with source maps
+- Add production-ready minified versions
+- Create interactive demo page with real-time EEG visualization
+- Update package.json with proper exports and build scripts
+- Add comprehensive .gitignore for clean version control
+- Enhance README with setup instructions and troubleshooting
+- Add Muse S pairing guide and multi-point Bluetooth notes
+- Include React component entry point
+
+I'm not sure of the direction the auther would like to take the project so didn't make these changes as a pull requiest, I'm happy to make one if the author desires.
+
 # web-muse
 
 A modern JavaScript library for connecting to Muse EEG devices using Web Bluetooth API. This project aims to provide a maintained alternative to [muse-js](https://github.com/urish/muse-js) which is no longer actively maintained.
