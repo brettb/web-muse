@@ -49,9 +49,9 @@ npm run build
 
 ### Using in Your Project
 
-You can install web-muse directly from your local clone using one of these methods:
+You can install web-muse using one of these methods:
 
-#### Method 1: Using `npm link`
+#### Method 1: Using `npm link` (for development)
 
 ```bash
 # In web-muse directory
@@ -89,12 +89,24 @@ Add this to your project's package.json:
 
 Then run `npm install`
 
+## Distribution Formats
+
+The library is built into multiple formats for maximum compatibility:
+
+- **ES Module** (`dist/web-muse.esm.js`) - For modern browsers and bundlers with tree-shaking support
+- **CommonJS** (`dist/web-muse.cjs.js`) - For Node.js and older bundlers
+- **Minified versions** of both formats for production use
+
 ## Quick Start
 
 ### Basic Usage (Vanilla JavaScript)
 
 ```javascript
+// For modern bundlers (recommended)
 import { connectMuse } from "web-muse";
+
+// For Node.js or older bundlers
+const { connectMuse } = require("web-muse");
 
 async function connectToMuse() {
   const muse = await connectMuse();
@@ -111,6 +123,7 @@ async function connectToMuse() {
 ### React Usage
 
 ```jsx
+// Import React components (when available)
 import { useEEG, EEGProvider } from "web-muse/react";
 
 // Wrap your app with the provider
@@ -144,13 +157,10 @@ function YourComponent() {
 # Install dependencies
 npm install
 
-# Run example
-npm run dev
-
-# Build library
+# Build library (creates dist files)
 npm run build
 
-# Run tests
+# Run tests (when available)
 npm test
 ```
 
@@ -165,9 +175,31 @@ npm test
 
 Note: Safari and iOS devices do not currently support Web Bluetooth.
 
-## Browser Support
+## Hardware Setup
 
-Web Bluetooth API is required. Check [browser compatibility](https://caniuse.com/web-bluetooth).
+### Pairing Your Muse S Headband
+
+Before using web-muse with your Muse S headband, you need to pair it with the official Muse mobile app first:
+
+#### Step-by-Step Pairing Instructions
+
+1. **Prepare your Muse S**: Press and hold the power button on your Muse S headband for six seconds until all the indicator lights are blinking.
+
+2. **Enable Bluetooth & Location Services**: On your smartphone or tablet, go to your device's main settings and make sure Bluetooth and location services are turned on.
+
+3. **Open the Muse App**: Open the Muse app on your mobile device.
+
+4. **Start the Pairing Process**: Tap the Bluetooth icon in the top-left corner of the app's screen.
+
+5. **Connect to Your Muse S**: Your Muse ID should appear in a list of available devices; tap on it to complete the pairing process.
+
+**Note**: Once paired with the mobile app, your Muse S should be discoverable by web browsers that support Web Bluetooth. You typically only need to do this initial pairing once.
+
+**⚠️ Important**: Muse headbands do not support multi-point Bluetooth connectivity at this time. Muse can only connect to one device at a time. If you're having connection issues, make sure your Muse is not connected to any other devices (including the Muse mobile app) before attempting to connect via web-muse.
+
+### Browser Compatibility
+
+Web Bluetooth API is required. Check [browser compatibility](https://caniuse.com/web-bluetooth) for the latest support status.
 
 ## Documentation
 

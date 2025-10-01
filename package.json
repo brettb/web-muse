@@ -13,12 +13,39 @@
   "license": "ISC",
   "author": "Itay Inbar",
   "type": "module",
-  "main": "src/lib/MuseDevice.js",
+  "main": "dist/web-muse.cjs.js",
+  "module": "dist/web-muse.esm.js",
+  "exports": {
+    ".": {
+      "import": "./dist/web-muse.esm.js",
+      "require": "./dist/web-muse.cjs.js"
+    },
+    "./react": {
+      "import": "./dist/react/web-muse-react.esm.js",
+      "require": "./dist/react/web-muse-react.cjs.js"
+    }
+  },
+  "files": [
+    "dist",
+    "src",
+    "README.md"
+  ],
   "directories": {
     "doc": "docs",
     "example": "examples"
   },
   "scripts": {
+    "build": "rollup -c",
     "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.28.4",
+    "@babel/preset-env": "^7.28.3",
+    "@babel/preset-react": "^7.27.1",
+    "@rollup/plugin-babel": "^6.0.4",
+    "@rollup/plugin-commonjs": "^25.0.7",
+    "@rollup/plugin-node-resolve": "^15.2.3",
+    "rollup": "^4.9.6",
+    "rollup-plugin-terser": "^7.0.2"
   }
 }

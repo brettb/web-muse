@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web Muse Demo</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 5px;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        button:disabled {
+            background: #6c757d;
+            cursor: not-allowed;
+        }
+        .status {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        .status.connected {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .status.disconnected {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        .status.connecting {
+            background: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeaa7;
+        }
+        .data-display {
+            margin-top: 20px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            font-family: monospace;
+            white-space: pre-wrap;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        .controls {
+            margin: 20px 0;
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+        .info {
+            background: #e7f3ff;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            border-left: 4px solid #007bff;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧠 Web Muse EEG Demo</h1>
+
+        <div class="info">
+            <strong>Note:</strong> This demo requires a Muse EEG headband and Web Bluetooth support.
+            Works in Chrome, Edge, and Opera browsers. Make sure your Muse device is nearby and charged.
+        </div>
+
+        <div class="controls">
+            <button id="connectBtn">Connect to Muse</button>
+            <button id="disconnectBtn" disabled>Disconnect</button>
+            <button id="startRecordingBtn" disabled>Start Recording</button>
+            <button id="stopRecordingBtn" disabled>Stop Recording</button>
+        </div>
+
+        <div id="status" class="status disconnected">
+            Disconnected - Click "Connect to Muse" to begin
+        </div>
+
+        <div>
+            <h3>Connection Status:</h3>
+            <div id="connectionInfo">Not connected</div>
+        </div>
+
+        <div>
+            <h3>EEG Data (256Hz sampling rate):</h3>
+            <div id="eegData" class="data-display">Waiting for data...</div>
+        </div>
+
+        <div>
+            <h3>Device Info:</h3>
+            <div id="deviceInfo">No device information available</div>
+        </div>
+    </div>
+
+    <!-- Load the built web-muse library -->
+    <script type="module">
+        import { connectMuse } from './dist/web-muse.esm.js';
+
+        let muse = null;
+        let recordingInterval = null;
+        let eegHistory = [];
+
+        const connectBtn = document.getElementById('connectBtn');
+        const disconnectBtn = document.getElementById('disconnectBtn');
+        const startRecordingBtn = document.getElementById('startRecordingBtn');
+        const stopRecordingBtn = document.getElementById('stopRecordingBtn');
+        const statusDiv = document.getElementById('status');
+        const connectionInfo = document.getElementById('connectionInfo');
+        const eegDataDiv = document.getElementById('eegData');
+        const deviceInfoDiv = document.getElementById('deviceInfo');
+
+        // Update UI based on connection state
+        function updateConnectionState(state) {
+            switch(state) {
+                case 0:
+                    statusDiv.textContent = 'Disconnected';
+                    statusDiv.className = 'status disconnected';
+                    connectBtn.disabled = false;
+                    disconnectBtn.disabled = true;
+                    startRecordingBtn.disabled = true;
+                    stopRecordingBtn.disabled = true;
+                    break;
+                case 1:
+                    statusDiv.textContent = 'Connecting...';
+                    statusDiv.className = 'status connecting';
+                    connectBtn.disabled = true;
+                    break;
+                case 2:
+                    statusDiv.textContent = 'Connected';
+                    statusDiv.className = 'status connected';
+                    disconnectBtn.disabled = false;
+                    startRecordingBtn.disabled = false;
+                    break;
+            }
+        }
+
+        // Connect to Muse device
+        async function connect() {
+            try {
+                updateConnectionState(1);
+                muse = await connectMuse();
+                updateConnectionState(2);
+
+                connectionInfo.textContent = `Connected to: ${muse.device.name || 'Muse Device'}`;
+                deviceInfoDiv.textContent = `Battery: ${muse.batteryLevel || 'Unknown'}%`;
+
+                // Start receiving EEG data
+                startEEGStreaming();
+
+            } catch (error) {
+                console.error('Connection failed:', error);
+                updateConnectionState(0);
+                connectionInfo.textContent = `Connection failed: ${error.message}`;
+            }
+        }
+
+        // Start EEG data streaming
+        function startEEGStreaming() {
+            if (recordingInterval) clearInterval(recordingInterval);
+
+            recordingInterval = setInterval(() => {
+                if (muse && muse.eeg) {
+                    try {
+                        const eegData = muse.eeg.slice(0, 4).map((buffer, index) => {
+                            const value = buffer.read();
+                            return {
+                                channel: `CH${index + 1}`,
+                                value: value.toFixed(2),
+                                timestamp: Date.now()
+                            };
+                        });
+
+                        // Update display
+                        eegDataDiv.textContent = JSON.stringify(eegData, null, 2);
+
+                        // Keep history for potential visualization
+                        eegHistory.push(...eegData);
+                        if (eegHistory.length > 100) {
+                            eegHistory = eegHistory.slice(-100);
+                        }
+
+                    } catch (error) {
+                        console.error('Error reading EEG data:', error);
+                    }
+                }
+            }, 1000 / 256); // 256Hz sampling rate
+        }
+
+        // Disconnect from Muse
+        function disconnect() {
+            if (recordingInterval) {
+                clearInterval(recordingInterval);
+                recordingInterval = null;
+            }
+            if (muse) {
+                muse.disconnect();
+                muse = null;
+            }
+            updateConnectionState(0);
+            connectionInfo.textContent = 'Disconnected';
+            deviceInfoDiv.textContent = 'No device information available';
+            eegDataDiv.textContent = 'Waiting for data...';
+            eegHistory = [];
+        }
+
+        // Event listeners
+        connectBtn.addEventListener('click', connect);
+        disconnectBtn.addEventListener('click', disconnect);
+
+        startRecordingBtn.addEventListener('click', () => {
+            console.log('Recording feature not implemented in this demo');
+            startRecordingBtn.textContent = 'Recording...';
+            startRecordingBtn.disabled = true;
+            stopRecordingBtn.disabled = false;
+        });
+
+        stopRecordingBtn.addEventListener('click', () => {
+            console.log('Recording stopped');
+            startRecordingBtn.textContent = 'Start Recording';
+            startRecordingBtn.disabled = false;
+            stopRecordingBtn.disabled = true;
+        });
+
+        // Initialize
+        updateConnectionState(0);
+    </script>
+</body>
+</html>

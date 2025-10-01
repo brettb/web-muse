@@ -1,7 +1,5 @@
-import { startRecording, stopRecording } from "../services/eeg";
-import mockCalibrationData from "../assets/mockCalibrationData.json";
-import mockClassificationData from "../assets/mockClassificationData.json";
-import { useEEG as EEGContext } from "../hooks/EEGContext";
+import { startRecording, stopRecording } from "../../lib/eeg";
+import { useEEG as EEGContext } from "../context/EEGContext";
 /**
  * A function to manage EEG functionality for the application.
  *

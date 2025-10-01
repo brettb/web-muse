@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
-import { connectMuse, setupPipeline } from "../services/eeg";
+import { connectMuse } from "../../lib/MuseDevice";
+import { setupPipeline } from "../../lib/eeg";
 
 const EEGContext = createContext();
 
