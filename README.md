@@ -180,6 +180,53 @@ npm run build
 npm test
 ```
 
+## Demo
+
+The project includes an interactive demo page that showcases the web-muse library functionality.
+
+### Running the Demo
+
+**Requirements**: The demo requires a secure HTTP context for Web Bluetooth to work properly.
+
+#### Option 1: Local Web Server (Recommended)
+
+```bash
+# Start the local web server (in a separate terminal)
+python3 -m http.server 8080
+
+# Or if you have Node.js:
+npx http-server -p 8080
+
+# Then open in browser:
+http://localhost:8080/demo.html
+```
+
+#### Option 2: Direct File Access
+
+You can open `demo.html` directly in your browser, but **Web Bluetooth features won't work** because they require HTTPS or localhost for security reasons.
+
+### Demo Features
+
+- **🔗 Connect Button**: Pair with your Muse headband via Web Bluetooth
+- **📊 Real-time EEG Data**: Live 4-channel visualization at 256Hz sampling rate
+- **🔋 Battery Status**: Device information and connection status
+- **⚙️ Connection Controls**: Start/stop data streaming and recording
+
+### Browser Compatibility for Demo
+
+- ✅ **Chrome** (recommended)
+- ✅ **Edge**
+- ✅ **Opera**
+- ❌ **Safari** (no Web Bluetooth support)
+
+### Testing with Your Muse
+
+1. **Charge your Muse headband** and ensure it's nearby
+2. **Enable Bluetooth** on your computer
+3. **Open** `http://localhost:8080/demo.html` in a supported browser
+4. **Click "Connect to Muse"** and follow the pairing process
+5. **View real-time EEG data** streaming immediately!
+
 ## Requirements
 
 - A Muse headband (tested with Muse 2 and Muse S)
